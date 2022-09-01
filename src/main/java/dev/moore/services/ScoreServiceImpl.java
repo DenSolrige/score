@@ -5,6 +5,7 @@ import dev.moore.exceptions.NegativeScoreException;
 import dev.moore.exceptions.ScoreNotFoundException;
 import dev.moore.repos.ScoreRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
@@ -72,6 +73,10 @@ public class ScoreServiceImpl implements ScoreService {
 
     @Override
     public void deleteScore(int id) {
-        this.scoreRepo.deleteById(id);
+        if(this.scoreRepo.existsById(id)){
+            this.scoreRepo.deleteById(id);
+        }else{
+            throw new ScoreNotFoundException();
+        }
     }
 }
